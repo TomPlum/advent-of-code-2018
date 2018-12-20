@@ -5,10 +5,10 @@ repositories {
 	mavenCentral()
 }
 
-group = 'com.project.template'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.9
-targetCompatibility = 1.9
+group = 'com.advent'
+version = '1.0.0'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 
 dependencies {
@@ -16,4 +16,7 @@ dependencies {
     testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
     testCompile("org.junit.jupiter:junit-jupiter-engine:5.3.1")
     testCompile("org.junit.platform:junit-platform-launcher:1.3.1")
+
+    //Test Libraries
+    testCompile("org.assertj:assertj-core:3.11.1")
 }
