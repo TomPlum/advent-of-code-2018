@@ -3,6 +3,12 @@ apply plugin: 'idea'
 
 repositories {
 	mavenCentral()
+    jcenter()
+    maven {
+        name "jitpack"
+        url "https://jitpack.io"
+    }
+
 }
 
 group = 'com.advent'
@@ -12,6 +18,7 @@ targetCompatibility = 1.8
 
 
 dependencies {
+    compile("com.github.tomplum:domain-library:1.1.6")
     //Junit 5
     testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
     testCompile("org.junit.jupiter:junit-jupiter-engine:5.3.1")

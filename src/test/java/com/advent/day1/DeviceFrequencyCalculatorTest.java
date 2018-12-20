@@ -10,21 +10,27 @@ class DeviceFrequencyCalculatorTest {
     @Test
     void calculateResultantFrequency_exampleInput1() {
         String fileName = "example-input-1.txt";
-        Integer resultantFrequency = deviceFrequencyCalculator.calculateResultantFrequency(fileName);
-        assertThat(resultantFrequency).isEqualTo(3);
+        Frequency resultantFrequency = deviceFrequencyCalculator.calculateResultantFrequency(fileName);
+        assertThat(resultantFrequency.getValue()).isEqualTo(3);
     }
 
     @Test
     void calculateResultantFrequency_exampleInput2() {
         String fileName = "example-input-2.txt";
-        Integer resultantFrequency = deviceFrequencyCalculator.calculateResultantFrequency(fileName);
-        assertThat(resultantFrequency).isEqualTo(0);
+        Frequency resultantFrequency = deviceFrequencyCalculator.calculateResultantFrequency(fileName);
+        assertThat(resultantFrequency.getValue()).isEqualTo(0);
     }
 
     @Test
     void calculateResultantFrequency_exampleInput3() {
         String fileName = "example-input-3.txt";
-        Integer resultantFrequency = deviceFrequencyCalculator.calculateResultantFrequency(fileName);
-        assertThat(resultantFrequency).isEqualTo(-6);
+        Frequency resultantFrequency = deviceFrequencyCalculator.calculateResultantFrequency(fileName);
+        assertThat(resultantFrequency.getValue()).isEqualTo(-6);
+    }
+
+    @Test
+    void calculateResultantFrequency_dayOneInput() {
+        Frequency resultantFrequency = deviceFrequencyCalculator.calculateResultantFrequency();
+        assertThat(resultantFrequency.getValue()).isEqualTo(442);
     }
 }
