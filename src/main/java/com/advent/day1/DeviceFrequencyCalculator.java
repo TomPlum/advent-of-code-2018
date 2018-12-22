@@ -1,9 +1,16 @@
 package com.advent.day1;
 
+import com.advent.common.ListUtils;
 import com.advent.common.PuzzleInputReader;
+import com.advent.domain.Frequency;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 class DeviceFrequencyCalculator {
     private final List<Frequency> dayOneInput =  PuzzleInputReader.readPuzzleInput(1);
@@ -18,18 +25,17 @@ class DeviceFrequencyCalculator {
     }
 
     private Frequency calculateResultantFrequency(List<Frequency> puzzleInput) {
-        int resultantFrequency = puzzleInput.get(0).getValue();
-        for (int i = 1; i < puzzleInput.size(); i++) {
-            resultantFrequency += puzzleInput.get(i).getValue();
-        }
-        return new Frequency(resultantFrequency);
+        AtomicInteger resultant = new AtomicInteger(0);
+        Stream<Integer> integerStream = puzzleInput.stream().map(Frequency::getValue);
+        List<Integer> list = integerStream.sequential().mapToInt(resultant::addAndGet).boxed().collect(Collectors.toList());
+        return new Frequency(ListUtils.getLastElement(list));
     }
 
-    public Frequency getFirstDuplicateFrequency() {
+    Frequency getFirstDuplicateFrequency() {
         return calculateFirstDuplicateFrequency(dayOneInput);
     }
 
-    public Frequency getFirstDupicateFrequency(String fileName) {
+    Frequency getFirstDuplicateFrequency(String fileName) {
         List<Frequency> puzzleInput = PuzzleInputReader.readInputAsFrequency(fileName);
         return calculateFirstDuplicateFrequency(puzzleInput);
     }

@@ -1,5 +1,7 @@
 package com.advent.day1;
 
+import com.advent.domain.Frequency;
+
 public class Solution {
     public static void main(String[] args) {
         DeviceFrequencyCalculator calculator = new DeviceFrequencyCalculator();

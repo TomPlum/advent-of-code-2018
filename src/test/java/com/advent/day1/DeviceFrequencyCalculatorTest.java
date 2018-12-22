@@ -1,5 +1,6 @@
 package com.advent.day1;
 
+import com.advent.domain.Frequency;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ class DeviceFrequencyCalculatorTest {
     @Tag("Day-1-Part-2")
     void calculateFirstDuplicateResultantFrequency_exampleInput1() {
         String fileName = "day1/example-input-2-1.txt";
-        Frequency duplicateFrequency = deviceFrequencyCalculator.getFirstDupicateFrequency(fileName);
+        Frequency duplicateFrequency = deviceFrequencyCalculator.getFirstDuplicateFrequency(fileName);
         assertThat(duplicateFrequency.getValue()).isEqualTo(0);
     }
 
@@ -51,7 +52,7 @@ class DeviceFrequencyCalculatorTest {
     @Tag("Day-1-Part-2")
     void calculateFirstDuplicateResultantFrequency_exampleInput2() {
         String fileName = "day1/example-input-2-2.txt";
-        Frequency duplicateFrequency = deviceFrequencyCalculator.getFirstDupicateFrequency(fileName);
+        Frequency duplicateFrequency = deviceFrequencyCalculator.getFirstDuplicateFrequency(fileName);
         assertThat(duplicateFrequency.getValue()).isEqualTo(10);
     }
 
@@ -59,7 +60,7 @@ class DeviceFrequencyCalculatorTest {
     @Tag("Day-1-Part-2")
     void calculateFirstDuplicateResultantFrequency_exampleInput3() {
         String fileName = "day1/example-input-2-3.txt";
-        Frequency duplicateFrequency = deviceFrequencyCalculator.getFirstDupicateFrequency(fileName);
+        Frequency duplicateFrequency = deviceFrequencyCalculator.getFirstDuplicateFrequency(fileName);
         assertThat(duplicateFrequency.getValue()).isEqualTo(5);
     }
 
@@ -67,7 +68,7 @@ class DeviceFrequencyCalculatorTest {
     @Tag("Day-1-Part-2")
     void calculateFirstDuplicateResultantFrequency_exampleInput4() {
         String fileName = "day1/example-input-2-4.txt";
-        Frequency duplicateFrequency = deviceFrequencyCalculator.getFirstDupicateFrequency(fileName);
+        Frequency duplicateFrequency = deviceFrequencyCalculator.getFirstDuplicateFrequency(fileName);
         assertThat(duplicateFrequency.getValue()).isEqualTo(14);
     }
 

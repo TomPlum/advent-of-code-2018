@@ -1,6 +1,6 @@
 package com.advent.common;
 
-import com.advent.day1.Frequency;
+import com.advent.domain.Frequency;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
