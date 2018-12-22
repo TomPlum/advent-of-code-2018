@@ -15,6 +15,10 @@ public class PuzzleInputReader {
         return readInputAsFrequency(createFileName(dayNumber));
     }
 
+    public static List<String> readPuzzleInputAsString(Integer dayNumber) {
+        return readFile(createFileName(dayNumber));
+    }
+
     private static String createFileName(Integer dayNumber) {
         return "day-" + dayNumber + "-input.txt";
     }
