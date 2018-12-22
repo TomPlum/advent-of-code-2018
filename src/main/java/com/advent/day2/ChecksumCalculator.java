@@ -48,23 +48,14 @@ public class ChecksumCalculator {
     }
 
     protected boolean boxIdContainsDuplicate(BoxID id) {
-        int count = 0;
-        char[] characters = id.getValue().toCharArray();
-        for (char searchChar : characters) {
-            for (char idChar : characters) {
-                if (idChar == searchChar) {
-                    count++;
-                }
-            }
-            if (count == 2) {
-                return true;
-            }
-            count = 0;
-        }
-        return false;
+       return boxIdContainsRecurringCharacter(id, 2);
     }
 
     public boolean boxIdContainsTriplicate(BoxID id) {
+        return boxIdContainsRecurringCharacter(id, 3);
+    }
+
+    private boolean boxIdContainsRecurringCharacter(BoxID id, int recurringTimes) {
         int count = 0;
         char[] characters = id.getValue().toCharArray();
         for (char searchChar : characters) {
@@ -73,7 +64,7 @@ public class ChecksumCalculator {
                     count++;
                 }
             }
-            if (count == 3) {
+            if (count == recurringTimes) {
                 return true;
             }
             count = 0;
