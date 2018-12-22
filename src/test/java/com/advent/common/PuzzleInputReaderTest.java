@@ -19,6 +19,6 @@ class PuzzleInputReaderTest {
     void readPuzzleInput() {
         Integer dayNumber = 1;
         List<Frequency> result = PuzzleInputReader.readPuzzleInput(dayNumber);
-        assertThat(result.get(0).getValue()).isEqualTo("-4");
+        assertThat(result.get(0).getValue()).isEqualTo(-4);
     }
 }

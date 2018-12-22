@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 class DeviceFrequencyCalculator {
+    private final List<Frequency> dayOneInput =  PuzzleInputReader.readPuzzleInput(1);
+
     Frequency getResultantFrequency() {
-        List<Frequency> puzzleInput =  PuzzleInputReader.readPuzzleInput(1);
-        return calculateResultantFrequency(puzzleInput);
+        return calculateResultantFrequency(dayOneInput);
     }
 
     Frequency getResultantFrequency(String fileName) {
@@ -24,25 +25,35 @@ class DeviceFrequencyCalculator {
         return new Frequency(resultantFrequency);
     }
 
-    public Frequency calculateFirstDuplicateFrequency(String fileName) {
+    public Frequency getFirstDuplicateFrequency() {
+        return calculateFirstDuplicateFrequency(dayOneInput);
+    }
+
+    public Frequency getFirstDupicateFrequency(String fileName) {
         List<Frequency> puzzleInput = PuzzleInputReader.readInputAsFrequency(fileName);
+        return calculateFirstDuplicateFrequency(puzzleInput);
+    }
+
+    private Frequency calculateFirstDuplicateFrequency(List<Frequency> puzzleInput) {
         List<Integer> resultantFrequencies = new ArrayList<>();
-        Integer currentFrequency = puzzleInput.get(0).getValue();
+        Integer resultant = 0;
         boolean foundDuplicate = false;
-        int counter = 1;
+        int counter = 0;
         while (!foundDuplicate) {
-            currentFrequency += puzzleInput.get(counter).getValue();
-            resultantFrequencies.add(currentFrequency);
-            if (resultantFrequencies.contains(currentFrequency)) {
+            resultantFrequencies.add(resultant);
+            resultant += puzzleInput.get(counter).getValue();
+            //System.out.println("R:" + resultant + ", V:" + puzzleInput.get(counter).getValue() + ", I:" + counter);
+            if (resultantFrequencies.contains(resultant)) {
                 foundDuplicate = true;
             }
 
-            if (counter == puzzleInput.size()) {
-                counter = 1;
-            }
-
             counter++;
+
+            if (counter == puzzleInput.size()) {
+                //System.out.println("Resetting Counter!");
+                counter = 0;
+            }
         }
-        return new Frequency(currentFrequency);
+        return new Frequency(resultant);
     }
 }
