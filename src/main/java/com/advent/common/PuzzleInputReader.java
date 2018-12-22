@@ -1,19 +1,18 @@
 package com.advent.common;
 
+import com.advent.day1.Frequency;
+
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PuzzleInputReader {
-    public static List<String> readPuzzleInput(Integer dayNumber) {
-        String fileName = createFileName(dayNumber);
-        Path filePath = getPath(fileName);
-        return readFile(filePath);
+    public static List<Frequency> readPuzzleInput(Integer dayNumber) {
+        return readInputAsFrequency(createFileName(dayNumber));
     }
 
     private static String createFileName(Integer dayNumber) {
@@ -21,25 +20,26 @@ public class PuzzleInputReader {
     }
 
     private static Path getPath(String fileName) {
-        Path filePath = null;
         try {
-            URI uri = PuzzleInputReader.class.getClassLoader().getResource(fileName).toURI();
-            filePath = Paths.get(uri);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+           return Paths.get(PuzzleInputReader.class.getClassLoader().getResource(fileName).toURI());
+        } catch (URISyntaxException | NullPointerException e) {
+            throw new RuntimeException("Cannot Find Resource " + fileName);
         }
-        return filePath;
     }
 
-    public static List<String> readInput(String fileName) {
-        return readFile(getPath(fileName));
+    public static List<Integer> readInputAsInteger(String fileName) {
+        return readFile(fileName).stream().map(Integer::parseInt).collect(Collectors.toList());
     }
 
-    private static List<String> readFile(Path filePath) {
+    public static List<Frequency> readInputAsFrequency(String fileName) {
+        return readFile(fileName).stream().map(v -> new Frequency(Integer.parseInt(v))).collect(Collectors.toList());
+    }
+
+    public static List<String> readFile(String fileName) {
         try {
-            return Files.readAllLines(filePath);
+            return Files.readAllLines(getPath(fileName));
         } catch (IOException e) {
-            throw new RuntimeException("Cannot Read File @ " + filePath.toString());
+            throw new RuntimeException("Cannot Read File @ " + fileName);
         }
     }
 }
