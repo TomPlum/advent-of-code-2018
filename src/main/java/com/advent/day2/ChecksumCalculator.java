@@ -14,14 +14,14 @@ import java.util.List;
 public class ChecksumCalculator {
     public Checksum calculateChecksum(String fileName) {
         List<String> puzzleInput = PuzzleInputReader.readFile(fileName);
-        return getChecksum(puzzleInput);
+        return formulateChecksum(puzzleInput);
     }
 
     public Checksum calculateChecksum() {
-        return getChecksum(PuzzleInputReader.readPuzzleInputAsString(2));
+        return formulateChecksum(PuzzleInputReader.readPuzzleInputAsString(2));
     }
 
-    protected Checksum getChecksum(List<String> puzzleInput) {
+    protected Checksum formulateChecksum(List<String> puzzleInput) {
         Integer duplicates = getDuplicates(puzzleInput);
         Integer triplicates = getTriplicates(puzzleInput);
         return new Checksum(duplicates * triplicates);
@@ -70,5 +70,33 @@ public class ChecksumCalculator {
             count = 0;
         }
         return false;
+    }
+
+    public boolean boxIdsHaveExactlyOneCharacterDifferent(BoxID id, BoxID id2) {
+        int differingCharacters = 0;
+        char[] firstIdCharacters = id.getValue().toCharArray();
+        char[] secondIdCharacters = id2.getValue().toCharArray();
+
+        for (int i = 0; i < id.getValue().length(); i++) {
+            if (firstIdCharacters[i] != secondIdCharacters[i]) {
+                differingCharacters++;
+            }
+        }
+
+        return differingCharacters == 1;
+    }
+
+    public String getBoxIdCommonCharacters(BoxID id, BoxID id2) {
+        StringBuffer commonCharacters = new StringBuffer();
+        char[] firstIdCharacters = id.getValue().toCharArray();
+        char[] secondIdCharacters = id2.getValue().toCharArray();
+
+        for (int i = 0; i < id.getValue().length(); i++) {
+            if (firstIdCharacters[i] == secondIdCharacters[i]) {
+                commonCharacters.append(firstIdCharacters[i]);
+            }
+        }
+
+        return commonCharacters.toString();
     }
 }

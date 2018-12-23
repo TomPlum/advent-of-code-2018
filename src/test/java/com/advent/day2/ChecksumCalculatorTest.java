@@ -64,4 +64,65 @@ class ChecksumCalculatorTest {
         boolean result =  checksumCalculator.boxIdContainsTriplicate(id);
         assertThat(result).isTrue();
     }
+
+    @Test
+    void boxIdsHaveExactlyOneCharacterDifferent_noDifferences() {
+        BoxID id = new BoxID("abcdef");
+        boolean result = checksumCalculator.boxIdsHaveExactlyOneCharacterDifferent(id, id);
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void boxIdsHaveExactlyOneCharacterDifferent_oneDifference_lastCharacter() {
+        BoxID id = new BoxID("abcdef");
+        BoxID id2 = new BoxID("abcdeg");
+        boolean result = checksumCalculator.boxIdsHaveExactlyOneCharacterDifferent(id, id2);
+        assertThat(result).isTrue();
+    }
+    @Test
+    void boxIdsHaveExactlyOneCharacterDifferent_oneDifference_firstCharacter() {
+        BoxID id = new BoxID("abcdef");
+        BoxID id2 = new BoxID("bbcdef");
+        boolean result = checksumCalculator.boxIdsHaveExactlyOneCharacterDifferent(id, id2);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void boxIdsHaveExactlyOneCharacterDifferent_twoDifferences() {
+        BoxID id = new BoxID("abcdef");
+        BoxID id2 = new BoxID("hbcdeg");
+        boolean result = checksumCalculator.boxIdsHaveExactlyOneCharacterDifferent(id, id2);
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void getBoxIdCommonCharacters_noDifferences() {
+        BoxID id = new BoxID("abcdef");
+        String result = checksumCalculator.getBoxIdCommonCharacters(id, id);
+        assertThat(result).isEqualTo(id.getValue());
+    }
+
+    @Test
+    void getBoxIdCommonCharacters_oneDifference_firstCharacter() {
+        BoxID id = new BoxID("abcdef");
+        BoxID id2 = new BoxID("bbcdef");
+        String result = checksumCalculator.getBoxIdCommonCharacters(id, id2);
+        assertThat(result).isEqualTo("bcdef");
+    }
+
+    @Test
+    void getBoxIdCommonCharacters_oneDifference_lastCharacter() {
+        BoxID id = new BoxID("abcdef");
+        BoxID id2 = new BoxID("abcdeg");
+        String result = checksumCalculator.getBoxIdCommonCharacters(id, id2);
+        assertThat(result).isEqualTo("abcde");
+    }
+
+    @Test
+    void getBoxIdCommonCharacters_twoDifferences() {
+        BoxID id = new BoxID("abcdef");
+        BoxID id2 = new BoxID("hbcdeg");
+        String result = checksumCalculator.getBoxIdCommonCharacters(id, id2);
+        assertThat(result).isEqualTo("bcde");
+    }
 }
