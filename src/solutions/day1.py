@@ -1,5 +1,5 @@
 from functools import reduce
-from reader import read
+from utility.reader import read
 
 
 def part1(frequencies: [int]) -> int:

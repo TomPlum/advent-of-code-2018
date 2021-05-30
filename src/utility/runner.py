@@ -1,4 +1,4 @@
-from day1 import solution_part_1
+from solutions.day1 import solution_part_1
 
 
 def execute():

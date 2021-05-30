@@ -1,4 +1,4 @@
-from src.day1 import part1, solution_part_1
+from solutions.day1 import part1, solution_part_1
 
 
 def example1():
