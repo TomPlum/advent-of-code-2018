@@ -11,19 +11,37 @@ def execute():
 
 def run(day: int, part1, part2):
     print(f"[Day {day}]")
+
     p1_result = measure(part1)
     print(f"Part 1: {p1_result[0]}")
-    print(f"Execution Time: {p1_result[1]}s\n")
+    print(f"Execution Time: {p1_result[1]}\n")
+
     p2_result = measure(part2)
     print(f"Part 2: {p2_result[0]}")
-    print(f"Execution Time: {p2_result[1]}s\n")
+    print(f"Execution Time: {p2_result[1]}\n")
+
     return p1_result[1], p2_result[1]
 
 
 def measure(func):
-    start = time.time()
+    start = time.time_ns()
     answer = func()
-    return answer, time.time() - start
+    return answer, format_nanos(time.time_ns() - start)
+
+
+def format_nanos(nanos: int):
+    s = round(nanos / 1_000_000_000)
+    ms = nanos / 1_000_000
+    remaining_nanos = nanos % 1_000_000_000
+    remaining_millis = remaining_nanos / 1_000_000
+    micro = round(nanos / 1000)
+
+    if abs(s) > 0:
+        return f"{s}s {remaining_millis}ms"
+    elif abs(ms) >= 1:
+        return f"{round(ms)}ms"
+    else:
+        return f"{micro}μs"
 
 
 if __name__ == '__main__':
