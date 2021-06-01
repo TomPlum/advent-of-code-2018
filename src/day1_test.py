@@ -1,4 +1,4 @@
-from day1 import part1, part2, solution_part_1
+from day1 import part1, part2, solution_part_1, solution_part_2
 
 
 def part1_example1():
@@ -39,3 +39,7 @@ def part2_example4():
 
 def part2_example5():
     assert part2([7, 7, -2, -7, -4]) == 14
+
+
+def solution2():
+    assert solution_part_2() == 75749
