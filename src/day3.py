@@ -1,5 +1,7 @@
 from typing import Any
 
+from reader import read
+
 
 def part1(data: [str]) -> int:
     claims = map(lambda d: Claim(d), data)
@@ -11,8 +13,12 @@ def part1(data: [str]) -> int:
                 ids = fabric.get(pos) or []
                 ids.extend(claim.id)
                 fabric.add(pos, ids)
-    print(fabric)
-    return 0
+    #print(fabric)
+    return len(list(filter(lambda k: len(fabric.get(k)) >= 2, fabric.values)))
+
+
+def solution_part_1() -> int:
+    return part1(read(3).toString())
 
 
 # Example: "#2 @ 3,1: 4x4"
@@ -65,6 +71,9 @@ class Grid:
 
     def get(self, pos: Point2D) -> Any:
         return self.values.get(pos, None)
+
+    def values(self):
+        return self.values
 
     def __repr__(self):
         s = ""
