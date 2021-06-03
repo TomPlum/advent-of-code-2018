@@ -16,9 +16,9 @@ Working retroactively over the years that I missed, I decided to tackle this yea
 
 | Day | Part 1 Answer  | Avg Time | Part 2 Answer             | Avg Time | Documentation                               |
 |-----|----------------|----------|---------------------------|----------|---------------------------------------------|
-| 01  | 525            |          | 75749                     |          | [Chronal Calibration](docs/DAY1.MD)         |
-| 02  | 6888           |          | icxjvbrobtunlelzpdmfkahgs |          | [Inventory Management System](docs/DAY2.MD) |
-| 03  | -              |          | -                         |          |                                             |
+| 01  | 525            | 1ms      | 75749                     | 21ms     | [Chronal Calibration](docs/DAY1.MD)         |
+| 02  | 6888           | 3ms      | icxjvbrobtunlelzpdmfkahgs | 464ms    | [Inventory Management System](docs/DAY2.MD) |
+| 03  | 112418         | 36s 767ms| -                         |          | [No Matter How You Slice It](docs/DAY3.MD)  |
 | 04  | -              |          | -                         |          |                                             |
 | 05  | -              |          | -                         |          |                                             |
 | 06  | -              |          | -                         |          |                                             |
