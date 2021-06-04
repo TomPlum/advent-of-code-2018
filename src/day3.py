@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Any
 
 from reader import read
@@ -35,28 +36,14 @@ class Claim:
         self.width = int(dim[0])
         self.height = int(dim[1])
 
-    def __str__(self):
-        return f"#{self.id} @ {self.left}, {self.top}: {self.width}x{self.height}"
-
     def __repr__(self):
         return f"#{self.id} @ {self.left}, {self.top}: {self.width}x{self.height}"
 
 
+@dataclass(eq=True, frozen=True)
 class Point2D:
-    def __init__(self, x: int, y: int):
-        self.x = x
-        self.y = y
-
-    def __eq__(self, other):
-        if isinstance(other, Point2D):
-            return self.x == other.x and self.y == other.y
-        return NotImplemented
-
-    def __hash__(self):
-        return hash(self.x) + hash(self.y)
-
-    def __str__(self):
-        return f"({self.x}, {self.y})"
+    x: int
+    y: int
 
     def __repr__(self):
         return f"({self.x}, {self.y})"
