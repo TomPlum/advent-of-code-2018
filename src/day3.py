@@ -13,12 +13,12 @@ def part1(data: [str]) -> int:
 
 def part2(data: [str]) -> int:
     """Finds the ID of the claim that does not overlap with any other."""
-    claims = list(map(lambda d: Claim(d), data))
-    id_to_claim = {}
-    for c in claims:
-        id_to_claim[c.id] = c
+    claims = {}
+    for d in data:
+        claim = Claim(d)
+        claims[claim.id] = claim
 
-    fabric = create_fabric(claims)
+    fabric = create_fabric(claims.values())
     single_claims = list(filter(lambda it: len(it) == 1, fabric.values.values()))
 
     non_overlapping = {}
@@ -28,7 +28,7 @@ def part2(data: [str]) -> int:
         non_overlapping[claim_id] = existing + 1
 
     for k, v in non_overlapping.items():
-        claim = id_to_claim[k]
+        claim = claims[k]
         if claim.width * claim.height == v:
             return claim.id
 
