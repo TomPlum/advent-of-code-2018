@@ -5,32 +5,66 @@ from reader import read
 
 
 def part1(data: [str]) -> int:
+    """Calculates the total square inches of fabric that overlaps with two or more claims."""
     claims = map(lambda d: Claim(d), data)
+    fabric = create_fabric(claims)
+    return len(list(filter(lambda k: len(fabric.get(k)) >= 2, fabric.values)))
+
+
+def part2(data: [str]) -> int:
+    """Finds the ID of the claim that does not overlap with any other."""
+    claims = list(map(lambda d: Claim(d), data))
+    id_to_claim = {}
+    for c in claims:
+        id_to_claim[c.id] = c
+
+    fabric = create_fabric(claims)
+    single_claims = list(filter(lambda it: len(it) == 1, fabric.values.values()))
+
+    non_overlapping = {}
+    for i in single_claims:
+        claim_id = i[0]
+        existing = non_overlapping.get(claim_id, 0)
+        non_overlapping[claim_id] = existing + 1
+
+    for k, v in non_overlapping.items():
+        claim = id_to_claim[k]
+        if claim.width * claim.height == v:
+            return claim.id
+
+    return 0
+
+
+def create_fabric(claims):
     fabric = Grid()
     for claim in claims:
         for x in range(claim.left, claim.left + claim.width):
             for y in range(claim.top, claim.top + claim.height):
                 pos = Point2D(x, y)
-                ids = fabric.get(pos) or []
-                ids.extend(claim.id)
+                ids = fabric.get(pos)
+                ids.append(claim.id)
                 fabric.add(pos, ids)
-    #print(fabric)
-    return len(list(filter(lambda k: len(fabric.get(k)) >= 2, fabric.values)))
+    return fabric
 
 
 def solution_part_1() -> int:
     return part1(read(3).toString())
 
 
-# Example: "#2 @ 3,1: 4x4"
+def solution_part_2() -> int:
+    return part2(read(3).toString())
+
+
 class Claim:
+    """A claim made by an Elf about an area of fabric in the format #2 @ 3,1: 4x4"""
+
     def __init__(self, value: str):
         data = value.split(" @ ")
         info = data[1].split(": ")
         sides = info[0].split(",")
         dim = info[1].split("x")
 
-        self.id = data[0][1]
+        self.id = int(data[0][1:])
         self.left = int(sides[0])
         self.top = int(sides[1])
         self.width = int(dim[0])
@@ -57,7 +91,7 @@ class Grid:
         self.values[pos] = value
 
     def get(self, pos: Point2D) -> Any:
-        return self.values.get(pos, None)
+        return self.values.get(pos, [])
 
     def values(self):
         return self.values
