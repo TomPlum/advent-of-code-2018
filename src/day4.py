@@ -1,44 +1,71 @@
 from dataclasses import dataclass
 from datetime import datetime
-from functools import reduce
+from enum import Enum
 
 
 def part1(data: [str]) -> int:
-    shifts = []
-
     guard_data = {}
-    guard_id = 0
 
-    asleep = []
-    wake = []
-    begin = ""
+    parsed = []
+    parsed_current = []
+    for i, d in enumerate(list(data)):
+        if i != 0 and "begins shift" in d:
+            parsed.append(list(parsed_current))
+            parsed_current.clear()
+            parsed_current.append(d)
+        else:
+            parsed_current.append(d)
+            if i == len(data) - 1:
+                parsed.append(list(parsed_current))
 
-    for d in list(data):
-        if "begins shift" in d:
-            if guard_id != 0:
-                existing = guard_data.get(guard_id, [])
-                existing.append(GuardShift(guard_id, begin, asleep, wake))
-                guard_data[guard_id] = existing
-            begin = d
-            guard_id = int(d.split(" #")[1].split(" ")[0].strip())
-            asleep.clear()
-            wake.clear()
-        elif "falls asleep" in d:
-            asleep.append(d)
-        elif "wakes up" in d:
-            wake.append(d)
+    events = []
 
-    print(guard_data)
+    for shift in list(parsed):
+        start = shift.pop(0)
+        events.append(ShiftEvent(EventType.START, start))
+        guard_id = int(start.split(" #")[1].split(" ")[0].strip())
+
+        for event in shift:
+            if "falls asleep" in event:
+                events.append(ShiftEvent(EventType.SLEEP, event))
+            elif "wakes up" in event:
+                events.append(ShiftEvent(EventType.WAKE, event))
+
+        existing = guard_data.get(guard_id, [])
+        existing.append(GuardShift(guard_id, events))
+        guard_data[guard_id] = existing
+        events = []
 
     time = {}
 
     for id, shifts in guard_data.items():
-        cumulative = sum(map(lambda s: s.sleep_duration(),  shifts))
+        for shift in shifts:
+            print(shift)
+        cumulative = sum(map(lambda s: s.sleep_duration(), shifts))
         time[id] = cumulative
 
     print(time)
 
     return 0
+
+
+class EventType(Enum):
+    START = 0
+    SLEEP = 1
+    WAKE = 2
+
+
+@dataclass(frozen=True)
+class ShiftEvent:
+    type: EventType
+    value: str
+
+    def get_date(self) -> datetime:
+        return datetime.strptime(self.value.split("] ")[0][1:], "%Y-%m-%d %H:%M")
+
+    def minutes_difference(self, other: 'ShiftEvent') -> int:
+        return abs(self.get_date() - other.get_date()).total_seconds() / 60.0
+
 
 
 @dataclass
@@ -48,37 +75,38 @@ class GuardShift:
     """[1518-11-01 00:05] falls asleep"""
     """[1518-11-01 00:25] wakes up"""
 
-    def __init__(self, id: int, begin: str, sleep: [str], wake: [str]):
-        # self.id = begin.split(" #")[1].split(" ")[0].strip()
+    def __init__(self, id: int, events: [ShiftEvent]):
         self.id = id
-        self.begin = self.__parse_date(begin)
-        self.sleep = self.parse_time(sleep)
-        self.wake = self.parse_time(wake)
-
-    def add_sleep_time(self, entry: str):
-        self.sleep.append(self.parse_time(entry)[0])
-
-    def add_awake_time(self, entry: str):
-        self.wake.append(self.parse_time(entry)[0])
-
-    def parse_time(self, value: [str]) -> [datetime]:
-        return list(map(lambda w: self.__parse_date(w), value))
-
-    def __parse_date(self, string: str) -> datetime:
-        return datetime.strptime(string.split("] ")[0][1:], "%Y-%m-%d %H:%M")
+        self.events = events
 
     def sleep_duration(self):
-        time = list(zip(self.sleep, self.wake))
         sleep = 0
         awake = 0
-        for i, t in enumerate(time):
-            if i == 0 or i % 2 == 0:
-                sleep += (t[1] - t[0]).total_seconds() / 60.0
-            else:
-                awake += (t[1] - t[0]).total_seconds() / 60.0
-            print(f"Slept from {t[0]} to {t[1]}")
+        last = None
+        for e in self.events:
+            if e.type == EventType.START:
+                s = ""
+                #print(f"[{self.id}] Start: {current}")
+            elif e.type == EventType.SLEEP:
+                #print(f"[{self.id}] Sleep: {current}")
+                awake += e.minutes_difference(last)
+                #print(f"Stayed awake for {(current - last).total_seconds() / 60.0} minutes")
+            elif e.type == EventType.WAKE:
+                #print(f"[{self.id}] Wake: {current}")
+                sleep += e.minutes_difference(last)
+                #print(f"Slept for {(current - last).total_seconds() / 60.0} minutes")
+            last = e
+            #print(f"Total Sleep Time: {sleep}\n")
+
         return sleep
 
     def __eq__(self, other):
         return self.id == other.id
 
+    def __repr__(self):
+        return "\n" + "\n".join(e.value for e in self.events)
+
+@dataclass
+class GuardRecord:
+    def __int__(self, shifts: [GuardShift]):
+        self.shifts = shifts
