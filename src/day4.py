@@ -6,8 +6,51 @@ from reader import read
 
 
 def part1(data: [str]) -> int:
+    records = get_guard_records(data)
+    sorted_by_sleep = sorted(records.items(), key=lambda r: r[1].total_time_slept(), reverse=True)
+    most_sleep = sorted_by_sleep[0]
+    minutes_slept = most_sleep[1].minutes_slept()
+    most_slept_minute = max(set(minutes_slept), key=minutes_slept.count)
+    most_slept_guard_id = most_sleep[0]
+    return most_slept_minute * most_slept_guard_id
 
+
+def part2(data: [str]) -> int:
+    guard_data = get_guard_records(data)
+
+    #for i, d in guard_data.items():
+        #print(f"{i}: {d}")
+
+    all_minutes = flatten(map(lambda r: r.minutes_slept(), guard_data.values()))
+    most_freq_minute = max(set(all_minutes), key=all_minutes.count)
+    print(f"Most Frequent Minute: {most_freq_minute}")
+
+    guard_slept_most = None
+    most_minutes = 0
+
+    for id, record in guard_data.items():
+        minutes_slept = record.minutes_slept()
+        occurrences = minutes_slept.count(most_freq_minute)
+        if occurrences > most_minutes:
+            most_minutes = occurrences
+            guard_slept_most = id
+
+    return guard_slept_most * most_freq_minute
+
+
+def solution_part_1() -> int:
+    return part1(read(4).toString())
+
+
+def solution_part_2() -> int:
+    return part2(read(4).toString())  # 90317 too high
+
+
+def get_guard_records(data: [str]):
     data = sorted(data, key=lambda s: (datetime.strptime(s.split("] ")[0][1:], "%Y-%m-%d %H:%M") - datetime.utcfromtimestamp(0)).total_seconds() * 1000.0)
+
+    for d in data:
+        print(d)
 
     guard_data = {}
 
@@ -47,17 +90,11 @@ def part1(data: [str]) -> int:
     for id, shifts in guard_data.items():
         records[id] = GuardRecord(shifts)
 
-    sorted_by_sleep = sorted(records.items(), key=lambda r: r[1].total_time_slept(), reverse=True)
-    most_sleep = sorted_by_sleep[0]
-    minutes_slept = most_sleep[1].minutes_slept()
-    most_slept_minute = max(set(minutes_slept), key=minutes_slept.count)
-    most_slept_guard_id = most_sleep[0]
-
-    return most_slept_minute * most_slept_guard_id
+    return records
 
 
-def solution_part_1() -> int:
-    return part1(read(4).toString())
+def flatten(arr):
+    return [item for sublist in arr for item in sublist]
 
 
 class EventType(Enum):
@@ -107,18 +144,20 @@ class GuardShift:
         last = None
         for e in self.events:
             if e.type == EventType.WAKE:
-
+                #print(f"Found Wake Event: {e}")
                 start = last.get_date()
                 end = e.get_date()
+                #print(f"Originally fell asleep at: {last}")
                 minute = start.minute
+                #print(f"Fell asleep on minute: {start.minute}")
+                #print(f"Should stop counting at: {end.minute}")
                 finished = False
                 while not finished:
                     minutes_asleep.append(minute)
-                    if minute == 59:
-                        minute = 0
-
                     if minute == end.minute:
                         finished = True
+                    elif minute == 59:
+                        minute = 0
 
                     minute = minute + 1
 
@@ -133,9 +172,8 @@ class GuardShift:
 class GuardRecord:
     shifts: [GuardShift]
 
-    def minutes_slept(self):
-        arrays = map(lambda s: s.minutes_asleep(), self.shifts)
-        return [item for sublist in list(arrays) for item in sublist]
+    def minutes_slept(self) -> [int]:
+        return flatten(map(lambda s: s.minutes_asleep(), self.shifts))
 
-    def total_time_slept(self):
+    def total_time_slept(self) -> int:
         return sum(map(lambda s: s.sleep_duration(), self.shifts))
