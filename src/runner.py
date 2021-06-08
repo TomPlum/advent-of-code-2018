@@ -3,12 +3,14 @@ import time
 from day1 import solution_part_1 as d1p1, solution_part_2 as d1p2
 from day2 import solution_part_1 as d2p1, solution_part_2 as d2p2
 from day3 import solution_part_1 as d3p1, solution_part_2 as d3p2
+from day4 import solution_part_1 as d4p1
 
 
 def execute():
     run(1, d1p1, d1p2)
     run(2, d2p1, d2p2)
     run(3, d3p1, d3p2)
+    run(4, d4p1, lambda x: x)
 
 
 def run(day: int, part1, part2):
