@@ -6,6 +6,9 @@ from reader import read
 
 
 def part1(data: [str]) -> int:
+
+    data = sorted(data, key=lambda s: (datetime.strptime(s.split("] ")[0][1:], "%Y-%m-%d %H:%M") - datetime.utcfromtimestamp(0)).total_seconds() * 1000.0)
+
     guard_data = {}
 
     parsed = []
@@ -25,6 +28,7 @@ def part1(data: [str]) -> int:
     for shift in list(parsed):
         start = shift.pop(0)
         events.append(ShiftEvent(EventType.START, start))
+
         guard_id = int(start.split(" #")[1].split(" ")[0].strip())
 
         for event in shift:
@@ -38,7 +42,6 @@ def part1(data: [str]) -> int:
         guard_data[guard_id] = existing
         events = []
 
-    time = {}
     records = {}
 
     for id, shifts in guard_data.items():
@@ -75,17 +78,15 @@ class ShiftEvent:
         return abs(self.get_date() - other.get_date()).total_seconds() / 60.0
 
 
-@dataclass
+@dataclass(frozen=True)
 class GuardShift:
     """A shift for a guard consisting of the times they begin their shift, fall asleep and wake up."""
     """[1518-11-01 00:00] Guard #10 begins shift"""
     """[1518-11-01 00:05] falls asleep"""
     """[1518-11-01 00:25] wakes up"""
 
-    def __init__(self, id: int, events: [ShiftEvent]):
-        self.id = id
-        self.events = events
-        self.minutes_asleep = []
+    id: int
+    events: [ShiftEvent]
 
     def sleep_duration(self):
         sleep = 0
@@ -97,13 +98,22 @@ class GuardShift:
             elif e.type == EventType.WAKE:
                 sleep += e.minutes_difference(last)
 
+            last = e
+
+        return sleep
+
+    def minutes_asleep(self) -> [int]:
+        minutes_asleep = []
+        last = None
+        for e in self.events:
+            if e.type == EventType.WAKE:
+
                 start = last.get_date()
                 end = e.get_date()
-
                 minute = start.minute
                 finished = False
                 while not finished:
-                    self.minutes_asleep.append(minute)
+                    minutes_asleep.append(minute)
                     if minute == 59:
                         minute = 0
 
@@ -113,11 +123,7 @@ class GuardShift:
                     minute = minute + 1
 
             last = e
-
-        return sleep
-
-    def __eq__(self, other):
-        return self.id == other.id
+        return minutes_asleep
 
     def __repr__(self):
         return "\n" + "\n".join(e.value for e in self.events)
@@ -128,7 +134,7 @@ class GuardRecord:
     shifts: [GuardShift]
 
     def minutes_slept(self):
-        arrays = map(lambda s: s.minutes_asleep, self.shifts)
+        arrays = map(lambda s: s.minutes_asleep(), self.shifts)
         return [item for sublist in list(arrays) for item in sublist]
 
     def total_time_slept(self):
