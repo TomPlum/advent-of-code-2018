@@ -19,7 +19,7 @@ Working retroactively over the years that I missed, I decided to tackle this yea
 | 01  | 525            | 1ms      | 75749                     | 21ms     | [Chronal Calibration](docs/DAY1.MD)         |
 | 02  | 6888           | 3ms      | icxjvbrobtunlelzpdmfkahgs | 464ms    | [Inventory Management System](docs/DAY2.MD) |
 | 03  | 112418         | 1s 422ms | 560                       | 1s 266ms | [No Matter How You Slice It](docs/DAY3.MD)  |
-| 04  | 95199          | 29ms     | -                         |          | [Repose Record](docs/DAY4.MD)               |
+| 04  | 95199          | 28ms     | 7887                      | 20ms     | [Repose Record](docs/DAY4.MD)               |
 | 05  | -              |          | -                         |          |                                             |
 | 06  | -              |          | -                         |          |                                             |
 | 07  | -              |          | -                         |          |                                             |
