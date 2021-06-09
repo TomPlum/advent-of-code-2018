@@ -18,12 +18,8 @@ def part1(data: [str]) -> int:
 def part2(data: [str]) -> int:
     guard_data = get_guard_records(data)
 
-    #for i, d in guard_data.items():
-        #print(f"{i}: {d}")
-
     all_minutes = flatten(map(lambda r: r.minutes_slept(), guard_data.values()))
     most_freq_minute = max(set(all_minutes), key=all_minutes.count)
-    print(f"Most Frequent Minute: {most_freq_minute}")
 
     guard_slept_most = None
     most_minutes = 0
@@ -35,6 +31,8 @@ def part2(data: [str]) -> int:
             most_minutes = occurrences
             guard_slept_most = id
 
+    print(f"Most Frequent Minute: {most_freq_minute}")
+    print(f"Guard ID: {guard_slept_most}")
     return guard_slept_most * most_freq_minute
 
 
@@ -43,25 +41,27 @@ def solution_part_1() -> int:
 
 
 def solution_part_2() -> int:
-    return part2(read(4).toString())  # 90317 too high
+    return part2(read(4).toString())  # 90317 and 21127 too high
 
 
 def get_guard_records(data: [str]):
     data = sorted(data, key=lambda s: (datetime.strptime(s.split("] ")[0][1:], "%Y-%m-%d %H:%M") - datetime.utcfromtimestamp(0)).total_seconds() * 1000.0)
 
-    for d in data:
-        print(d)
-
     guard_data = {}
 
     parsed = []
     parsed_current = []
+    last_was_begin = False
     for i, d in enumerate(list(data)):
         if i != 0 and "begins shift" in d:
-            parsed.append(list(parsed_current))
+            if not last_was_begin:
+                parsed.append(list(parsed_current))
+
+            last_was_begin = True
             parsed_current.clear()
             parsed_current.append(d)
         else:
+            last_was_begin = False
             parsed_current.append(d)
             if i == len(data) - 1:
                 parsed.append(list(parsed_current))
@@ -142,21 +142,18 @@ class GuardShift:
     def minutes_asleep(self) -> [int]:
         minutes_asleep = []
         last = None
+
         for e in self.events:
             if e.type == EventType.WAKE:
-                #print(f"Found Wake Event: {e}")
                 start = last.get_date()
                 end = e.get_date()
-                #print(f"Originally fell asleep at: {last}")
                 minute = start.minute
-                #print(f"Fell asleep on minute: {start.minute}")
-                #print(f"Should stop counting at: {end.minute}")
                 finished = False
                 while not finished:
                     minutes_asleep.append(minute)
-                    if minute == end.minute:
+                    if minute == end.minute - 1:  # Guards count as awake on the minute they wake up
                         finished = True
-                    elif minute == 59:
+                    elif minute == 60:
                         minute = 0
 
                     minute = minute + 1
