@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
+from collections import Counter
 
 from reader import read
 
@@ -18,21 +19,18 @@ def part1(data: [str]) -> int:
 def part2(data: [str]) -> int:
     guard_data = get_guard_records(data)
 
-    all_minutes = flatten(map(lambda r: r.minutes_slept(), guard_data.values()))
-    most_freq_minute = max(set(all_minutes), key=all_minutes.count)
-
     guard_slept_most = None
-    most_minutes = 0
+    most_freq_minute = 0
+    most_occurrences = 0
 
     for id, record in guard_data.items():
         minutes_slept = record.minutes_slept()
-        occurrences = minutes_slept.count(most_freq_minute)
-        if occurrences > most_minutes:
-            most_minutes = occurrences
+        occurrences = Counter(minutes_slept).most_common(1)[0]
+        if occurrences[1] > most_occurrences:
+            most_occurrences = occurrences[1]
             guard_slept_most = id
+            most_freq_minute = occurrences[0]
 
-    print(f"Most Frequent Minute: {most_freq_minute}")
-    print(f"Guard ID: {guard_slept_most}")
     return guard_slept_most * most_freq_minute
 
 

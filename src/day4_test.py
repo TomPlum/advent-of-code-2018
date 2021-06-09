@@ -1,4 +1,4 @@
-from day4 import part1, solution_part_1, part2
+from day4 import part1, solution_part_1, part2, solution_part_2
 
 example_input = [
     "[1518-11-01 00:00] Guard #10 begins shift",
@@ -31,3 +31,7 @@ def example_part2():
 
 def solution_part1():
     assert solution_part_1() == 95199
+
+
+def solution_part2():
+    assert solution_part_2() == 7887
