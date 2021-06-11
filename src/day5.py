@@ -1,30 +1,17 @@
-import re
-
 from reader import read
 
 
 def part1(data: str) -> int:
-    polymer = data
-    reactions_remaining = True
-    while reactions_remaining:
-        index = 0
-        for i, c in enumerate(polymer):
-            index = i
-            if i == 0:
-                continue
+    polymer = ['.']
 
-            last = polymer[i - 1]
-            equal = c.lower() == last.lower()
-            different_case = c != last
-            if equal and different_case:
-                polymer = re.sub(last + c, "", polymer)
-                break
+    for unit in data:
+        last = polymer[-1]
+        if last != unit and last.lower() == unit.lower():
+            polymer.pop()
+        else:
+            polymer.append(unit)
 
-        if index == len(polymer) - 1:
-            reactions_remaining = False
-
-    # print(f"{data} -> {polymer}")
-    return len(polymer)
+    return len(polymer) - 1
 
 
 def part2(data: str) -> int:
