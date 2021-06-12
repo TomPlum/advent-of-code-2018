@@ -1,7 +1,7 @@
-from dataclasses import dataclass
 from typing import Any
 
 from reader import read
+from utility import Point2D
 
 
 def part1(data: [str]) -> int:
@@ -72,15 +72,6 @@ class Claim:
 
     def __repr__(self):
         return f"#{self.id} @ {self.left}, {self.top}: {self.width}x{self.height}"
-
-
-@dataclass(eq=True, frozen=True)
-class Point2D:
-    x: int
-    y: int
-
-    def __repr__(self):
-        return f"({self.x}, {self.y})"
 
 
 class Grid:
