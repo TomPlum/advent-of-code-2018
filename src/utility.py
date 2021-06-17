@@ -3,6 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
+def flatten(arr):
+    return [item for sublist in arr for item in sublist]
+
+
 @dataclass(eq=True, frozen=True)
 class Point2D:
     x: int

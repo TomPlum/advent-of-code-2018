@@ -4,6 +4,7 @@ from enum import Enum
 from collections import Counter
 
 from reader import read
+from utility import flatten
 
 
 def part1(data: [str]) -> int:
@@ -89,10 +90,6 @@ def get_guard_records(data: [str]):
         records[id] = GuardRecord(shifts)
 
     return records
-
-
-def flatten(arr):
-    return [item for sublist in arr for item in sublist]
 
 
 class EventType(Enum):
