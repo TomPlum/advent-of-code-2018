@@ -5,6 +5,7 @@ from day2 import solution_part_1 as d2p1, solution_part_2 as d2p2
 from day3 import solution_part_1 as d3p1, solution_part_2 as d3p2
 from day4 import solution_part_1 as d4p1, solution_part_2 as d4p2
 from day5 import solution_part_1 as d5p1, solution_part_2 as d5p2
+from day7 import solution_part_1 as d7p1
 
 
 def execute():
@@ -13,6 +14,7 @@ def execute():
     run(3, d3p1, d3p2)
     run(4, d4p1, d4p2)
     run(5, d5p1, d5p2)
+    run(7, d7p1, not_implemented)
 
 
 def run(day: int, part1, part2):
@@ -49,6 +51,8 @@ def format_nanos(nanos: int):
     else:
         return f"{micro}μs"
 
+def not_implemented():
+    return "Not Implemented"
 
 if __name__ == '__main__':
     execute()
